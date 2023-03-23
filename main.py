@@ -1,21 +1,25 @@
-namespace SpriteKind {
-    export const Enemy2 = SpriteKind.create()
-}
+@namespace
+class SpriteKind:
+    Enemy2 = SpriteKind.create()
 
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function on_overlap_tile(sprite: Sprite, location: tiles.Location) {
-    info.player1.changeScoreBy(1)
-    info.player2.changeScoreBy(1)
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
-    tiles.setTileAt(location, sprites.castle.tileGrass1)
-})
-let p1Distance = 0
-let p2Distance = 0
-let Enemies : Sprite[] = []
-scene.setBackgroundColor(7)
-tiles.setCurrentTilemap(tilemap`
+def on_overlap_tile(sprite, location):
+    info.player1.change_score_by(1)
+    info.player2.change_score_by(1)
+    music.play(music.melody_playable(music.ba_ding),
+        music.PlaybackMode.IN_BACKGROUND)
+    tiles.set_tile_at(location, sprites.castle.tile_grass1)
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.chest_closed,
+    on_overlap_tile)
+
+p1Distance = 0
+p2Distance = 0
+Enemies: List[Sprite] = []
+scene.set_background_color(7)
+tiles.set_current_tilemap(tilemap("""
     level1
-`)
-let player1 = sprites.create(img`
+"""))
+player1 = sprites.create(img("""
         . . . . . . f f f f . . . . . . 
             . . . . f f f 2 2 f f f . . . . 
             . . . f f f 2 2 2 2 f f f . . . 
@@ -32,8 +36,9 @@ let player1 = sprites.create(img`
             . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
             . . . . . f f f f f f . . . . . 
             . . . . . f f . . f f . . . . .
-    `, SpriteKind.Player)
-let player2 = sprites.create(img`
+    """),
+    SpriteKind.player)
+player2 = sprites.create(img("""
         . . . . . f f 4 4 f f . . . . . 
             . . . . f 5 4 5 5 4 5 f . . . . 
             . . . f e 4 5 5 5 5 4 e f . . . 
@@ -50,15 +55,16 @@ let player2 = sprites.create(img`
             . . e f b d b d b d b b f e . . 
             . . . f f 1 d 1 d 1 d f f . . . 
             . . . . . f f b b f f . . . . .
-    `, SpriteKind.Player)
-controller.player1.moveSprite(player1)
-controller.player2.moveSprite(player2)
-info.player1.setLife(3)
-info.player2.setLife(3)
-info.player1.setScore(0)
-info.player2.setScore(0)
-scene.cameraFollowSprite(player1)
-let mySprite = sprites.create(img`
+    """),
+    SpriteKind.player)
+controller.player1.move_sprite(player1)
+controller.player2.move_sprite(player2)
+info.player1.set_life(3)
+info.player2.set_life(3)
+info.player1.set_score(0)
+info.player2.set_score(0)
+scene.camera_follow_sprite(player1)
+mySprite = sprites.create(img("""
         . . . . c c c c c c . . . . . . 
             . . . c 6 7 7 7 7 6 c . . . . . 
             . . c 7 7 7 7 7 7 7 7 c . . . . 
@@ -75,31 +81,27 @@ let mySprite = sprites.create(img`
             f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
             . f 6 1 1 1 1 1 1 6 6 6 f . . . 
             . . c c c c c c c c c f . . . .
-    `, SpriteKind.Enemy)
-mySprite.setPosition(142, 16)
-game.onUpdate(function on_on_update() {
-    
-})
-game.onUpdateInterval(100, function on_update_interval() {
-    
-    player2.setFlag(SpriteFlag.StayInScreen, true)
-    Enemies = sprites.allOfKind(SpriteKind.Enemy)
-    for (let value of Enemies) {
+    """),
+    SpriteKind.enemy)
+mySprite.set_position(142, 16)
+
+def on_on_update():
+    pass
+game.on_update(on_on_update)
+
+def on_update_interval():
+    global Enemies, p2Distance, p1Distance
+    player2.set_flag(SpriteFlag.STAY_IN_SCREEN, True)
+    Enemies = sprites.all_of_kind(SpriteKind.enemy)
+    for value in Enemies:
         p2Distance = Math.sqrt((value.x - player2.x) ** 2 + (value.y - player2.y) ** 2)
         p1Distance = Math.sqrt((value.x - player1.x) ** 2 + (value.y - player1.y) ** 2)
-        if (p1Distance > p2Distance) {
+        if p1Distance > p2Distance:
             value.follow(player2, 50)
-        } else {
+        else:
             value.follow(player1, 50)
-        }
-        
-        if (value.overlapsWith(player2)) {
+        if value.overlaps_with(player2):
             value.follow(player2, 0)
-        }
-        
-        if (value.overlapsWith(player1)) {
+        if value.overlaps_with(player1):
             value.follow(player1, 0)
-        }
-        
-    }
-})
+game.on_update_interval(100, on_update_interval)
