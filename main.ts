@@ -72,13 +72,24 @@ let mySprite = sprites.create(img`
     `, SpriteKind.Enemy)
 mySprite.setPosition(142, 16)
 game.onUpdate(function () {
+	
+})
+game.onUpdateInterval(100, function () {
+    player2.setFlag(SpriteFlag.StayInScreen, true)
     Enemies = sprites.allOfKind(SpriteKind.Enemy)
     for (let value of Enemies) {
         p2Distance = Math.sqrt((value.x - player2.x) ** 2 + (value.y - player2.y) ** 2)
         p1Distance = Math.sqrt((value.x - player1.x) ** 2 + (value.y - player1.y) ** 2)
-        value.follow(mySprite)
+        if (p1Distance > p2Distance) {
+            value.follow(player2, 50)
+        } else {
+            value.follow(player1, 50)
+        }
+        if (value.overlapsWith(player2)) {
+            value.follow(player2, 0)
+        }
+        if (value.overlapsWith(player1)) {
+            value.follow(player1, 0)
+        }
     }
-})
-game.onUpdateInterval(100, function () {
-    player2.setFlag(SpriteFlag.StayInScreen, true)
 })
