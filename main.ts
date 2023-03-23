@@ -52,7 +52,7 @@ info.player2.setLife(3)
 info.player1.setScore(0)
 info.player2.setScore(0)
 scene.cameraFollowSprite(player1)
-let mySprite = sprites.create(img`
+let Snake = sprites.create(img`
     . . . . c c c c c c . . . . . . 
     . . . c 6 7 7 7 7 6 c . . . . . 
     . . c 7 7 7 7 7 7 7 7 c . . . . 
@@ -70,7 +70,15 @@ let mySprite = sprites.create(img`
     . f 6 1 1 1 1 1 1 6 6 6 f . . . 
     . . c c c c c c c c c f . . . . 
     `, SpriteKind.Enemy)
-mySprite.setPosition(142, 16)
+Snake.setPosition(142, 16)
+let player1Health = statusbars.create(20, 4, StatusBarKind.Health)
+player1Health.setBarBorder(1, 15)
+player1Health.value = 100
+player1Health.attachToSprite(player1, -22, 0)
+let player2Health = statusbars.create(20, 4, StatusBarKind.Health)
+player2Health.setBarBorder(1, 15)
+player2Health.value = 100
+player2Health.attachToSprite(player2, -22, 0)
 game.onUpdate(function () {
 	
 })
