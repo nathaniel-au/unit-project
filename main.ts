@@ -4,6 +4,9 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     tiles.setTileAt(location, sprites.castle.tileGrass1)
 })
+let p1Distance = 0
+let p2Distance = 0
+let Enemies: Sprite[] = []
 scene.setBackgroundColor(7)
 tiles.setCurrentTilemap(tilemap`level1`)
 let player1 = sprites.create(img`
@@ -49,6 +52,33 @@ info.player2.setLife(3)
 info.player1.setScore(0)
 info.player2.setScore(0)
 scene.cameraFollowSprite(player1)
+let mySprite = sprites.create(img`
+    . . . . c c c c c c . . . . . . 
+    . . . c 6 7 7 7 7 6 c . . . . . 
+    . . c 7 7 7 7 7 7 7 7 c . . . . 
+    . c 6 7 7 7 7 7 7 7 7 6 c . . . 
+    . c 7 c 6 6 6 6 c 7 7 7 c . . . 
+    . f 7 6 f 6 6 f 6 7 7 7 f . . . 
+    . f 7 7 7 7 7 7 7 7 7 7 f . . . 
+    . . f 7 7 7 7 6 c 7 7 6 f c . . 
+    . . . f c c c c 7 7 6 f 7 7 c . 
+    . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
+    . c 7 7 2 7 7 c f c 6 7 7 6 c c 
+    c 1 1 1 1 7 6 f c c 6 6 6 c . . 
+    f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
+    f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
+    . f 6 1 1 1 1 1 1 6 6 6 f . . . 
+    . . c c c c c c c c c f . . . . 
+    `, SpriteKind.Enemy)
+mySprite.setPosition(142, 16)
+game.onUpdate(function () {
+    Enemies = sprites.allOfKind(SpriteKind.Enemy)
+    for (let value of Enemies) {
+        p2Distance = Math.sqrt((value.x - player2.x) ** 2 + (value.y - player2.y) ** 2)
+        p1Distance = Math.sqrt((value.x - player1.x) ** 2 + (value.y - player1.y) ** 2)
+        value.follow(mySprite)
+    }
+})
 game.onUpdateInterval(100, function () {
     player2.setFlag(SpriteFlag.StayInScreen, true)
 })
