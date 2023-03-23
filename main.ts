@@ -1,15 +1,32 @@
+function EnemyFollowing (Enemy: Sprite) {
+    p2Distance = Math.sqrt((Enemy.x - player2.x) ** 2 + (Enemy.y - player2.y) ** 2)
+    p1Distance = Math.sqrt((Enemy.x - player1.x) ** 2 + (Enemy.y - player1.y) ** 2)
+    if (p1Distance > p2Distance) {
+        Enemy.follow(player2, 50)
+    } else {
+        Enemy.follow(player1, 50)
+    }
+    if (Enemy.overlapsWith(player2)) {
+        Enemy.follow(player2, 0)
+    }
+    if (Enemy.overlapsWith(player1)) {
+        Enemy.follow(player1, 0)
+    }
+}
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
     info.player1.changeScoreBy(1)
     info.player2.changeScoreBy(1)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     tiles.setTileAt(location, sprites.castle.tileGrass1)
 })
+let Enemies: Sprite[] = []
 let p1Distance = 0
 let p2Distance = 0
-let Enemies: Sprite[] = []
+let player2: Sprite = null
+let player1: Sprite = null
 scene.setBackgroundColor(7)
 tiles.setCurrentTilemap(tilemap`level1`)
-let player1 = sprites.create(img`
+player1 = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
     . . . f f f 2 2 2 2 f f f . . . 
@@ -27,7 +44,7 @@ let player1 = sprites.create(img`
     . . . . . f f f f f f . . . . . 
     . . . . . f f . . f f . . . . . 
     `, SpriteKind.Player)
-let player2 = sprites.create(img`
+player2 = sprites.create(img`
     . . . . . f f 4 4 f f . . . . . 
     . . . . f 5 4 5 5 4 5 f . . . . 
     . . . f e 4 5 5 5 5 4 e f . . . 
@@ -72,32 +89,17 @@ let Snake = sprites.create(img`
     `, SpriteKind.Enemy)
 Snake.setPosition(142, 16)
 let player1Health = statusbars.create(20, 4, StatusBarKind.Health)
-player1Health.setBarBorder(1, 15)
+player1Health.setColor(3, 2)
 player1Health.value = 100
 player1Health.attachToSprite(player1, -22, 0)
 let player2Health = statusbars.create(20, 4, StatusBarKind.Health)
-player2Health.setBarBorder(1, 15)
+player2Health.setColor(3, 2)
 player2Health.value = 100
 player2Health.attachToSprite(player2, -22, 0)
-game.onUpdate(function () {
-	
-})
 game.onUpdateInterval(100, function () {
     player2.setFlag(SpriteFlag.StayInScreen, true)
     Enemies = sprites.allOfKind(SpriteKind.Enemy)
     for (let value of Enemies) {
-        p2Distance = Math.sqrt((value.x - player2.x) ** 2 + (value.y - player2.y) ** 2)
-        p1Distance = Math.sqrt((value.x - player1.x) ** 2 + (value.y - player1.y) ** 2)
-        if (p1Distance > p2Distance) {
-            value.follow(player2, 50)
-        } else {
-            value.follow(player1, 50)
-        }
-        if (value.overlapsWith(player2)) {
-            value.follow(player2, 0)
-        }
-        if (value.overlapsWith(player1)) {
-            value.follow(player1, 0)
-        }
+        EnemyFollowing(value)
     }
 })
