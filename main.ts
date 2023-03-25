@@ -2,17 +2,16 @@ function EnemyFollowing (Enemy: Sprite) {
     p2Distance = Math.sqrt((Enemy.x - player2.x) ** 2 + (Enemy.y - player2.y) ** 2)
     p1Distance = Math.sqrt((Enemy.x - player1.x) ** 2 + (Enemy.y - player1.y) ** 2)
     if (p1Distance > p2Distance) {
-        Enemy.follow(player2, 50)
+        return player2
     } else {
-        Enemy.follow(player1, 50)
-    }
-    if (Enemy.overlapsWith(player2)) {
-        Enemy.follow(player2, 0)
-    }
-    if (Enemy.overlapsWith(player1)) {
-        Enemy.follow(player1, 0)
+        return player1
     }
 }
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    for (let index = 0; index < randint(0, 5); index++) {
+        sprites.destroy(Enemies.pop())
+    }
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
     info.player1.changeScoreBy(1)
     info.player2.changeScoreBy(1)
@@ -100,6 +99,35 @@ game.onUpdateInterval(100, function () {
     player2.setFlag(SpriteFlag.StayInScreen, true)
     Enemies = sprites.allOfKind(SpriteKind.Enemy)
     for (let value of Enemies) {
+        value.follow(EnemyFollowing(value), 50)
+        if (value.overlapsWith(player2)) {
+            value.follow(player2, 0)
+        }
+        if (value.overlapsWith(player1)) {
+            value.follow(player1, 0)
+        }
         EnemyFollowing(value)
+    }
+    while (Enemies.length < 5) {
+        Snake = sprites.create(img`
+            . . . . c c c c c c . . . . . . 
+            . . . c 6 7 7 7 7 6 c . . . . . 
+            . . c 7 7 7 7 7 7 7 7 c . . . . 
+            . c 6 7 7 7 7 7 7 7 7 6 c . . . 
+            . c 7 c 6 6 6 6 c 7 7 7 c . . . 
+            . f 7 6 f 6 6 f 6 7 7 7 f . . . 
+            . f 7 7 7 7 7 7 7 7 7 7 f . . . 
+            . . f 7 7 7 7 6 c 7 7 6 f c . . 
+            . . . f c c c c 7 7 6 f 7 7 c . 
+            . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
+            . c 7 7 2 7 7 c f c 6 7 7 6 c c 
+            c 1 1 1 1 7 6 f c c 6 6 6 c . . 
+            f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
+            f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
+            . f 6 1 1 1 1 1 1 6 6 6 f . . . 
+            . . c c c c c c c c c f . . . . 
+            `, SpriteKind.Enemy)
+        Snake.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
+        Enemies = sprites.allOfKind(SpriteKind.Enemy)
     }
 })
