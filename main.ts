@@ -18,9 +18,18 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     tiles.setTileAt(location, sprites.castle.tileGrass1)
 })
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    game.gameOver(false)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    player1Health.value += -1
+    player2Health.value += -1
+})
 let Enemies: Sprite[] = []
 let p1Distance = 0
 let p2Distance = 0
+let player2Health: StatusBarSprite = null
+let player1Health: StatusBarSprite = null
 let player2: Sprite = null
 let player1: Sprite = null
 scene.setBackgroundColor(7)
@@ -61,8 +70,8 @@ player2 = sprites.create(img`
     . . . f f 1 d 1 d 1 d f f . . . 
     . . . . . f f b b f f . . . . . 
     `, SpriteKind.Player)
-controller.player1.moveSprite(player1)
-controller.player2.moveSprite(player2)
+controller.player1.moveSprite(player1, 100, 100)
+controller.player2.moveSprite(player2, 100, 100)
 info.player1.setLife(3)
 info.player2.setLife(3)
 info.player1.setScore(0)
@@ -87,11 +96,11 @@ let Snake = sprites.create(img`
     . . c c c c c c c c c f . . . . 
     `, SpriteKind.Enemy)
 Snake.setPosition(142, 16)
-let player1Health = statusbars.create(20, 4, StatusBarKind.Health)
+player1Health = statusbars.create(20, 4, StatusBarKind.Health)
 player1Health.setColor(3, 2)
 player1Health.value = 100
 player1Health.attachToSprite(player1, -22, 0)
-let player2Health = statusbars.create(20, 4, StatusBarKind.Health)
+player2Health = statusbars.create(20, 4, StatusBarKind.Health)
 player2Health.setColor(3, 2)
 player2Health.value = 100
 player2Health.attachToSprite(player2, -22, 0)
@@ -99,7 +108,7 @@ game.onUpdateInterval(100, function () {
     player2.setFlag(SpriteFlag.StayInScreen, true)
     Enemies = sprites.allOfKind(SpriteKind.Enemy)
     for (let value of Enemies) {
-        value.follow(EnemyFollowing(value), 50)
+        value.follow(EnemyFollowing(value), randint(70, 90))
         if (value.overlapsWith(player2)) {
             value.follow(player2, 0)
         }
@@ -108,7 +117,7 @@ game.onUpdateInterval(100, function () {
         }
         EnemyFollowing(value)
     }
-    while (Enemies.length < 5) {
+    while (Enemies.length < 7) {
         Snake = sprites.create(img`
             . . . . c c c c c c . . . . . . 
             . . . c 6 7 7 7 7 6 c . . . . . 
