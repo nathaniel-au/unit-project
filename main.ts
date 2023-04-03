@@ -8,9 +8,7 @@ function EnemyFollowing (Enemy: Sprite) {
     }
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    for (let index = 0; index < randint(0, 5); index++) {
-        sprites.destroy(chosen_enemy)
-    }
+    sprites.destroy(chosen_enemy)
     animation.runImageAnimation(
     player1,
     [img`
