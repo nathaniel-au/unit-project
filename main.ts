@@ -127,9 +127,10 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     chosen_enemy = otherSprite
-    pause(100)
+    pause(500)
     player1Health.value += -1
     player2Health.value += -1
+    pause(500)
 })
 let Enemies: Sprite[] = []
 let chosen_enemy: Sprite = null
