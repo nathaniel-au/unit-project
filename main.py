@@ -1,18 +1,16 @@
-function EnemyFollowing(Enemy: Sprite): Sprite {
-    
+def EnemyFollowing(Enemy: Sprite):
+    global p2Distance, p1Distance
     p2Distance = Math.sqrt((Enemy.x - player2.x) ** 2 + (Enemy.y - player2.y) ** 2)
     p1Distance = Math.sqrt((Enemy.x - player1.x) ** 2 + (Enemy.y - player1.y) ** 2)
-    if (p1Distance > p2Distance) {
+    if p1Distance > p2Distance:
         return player2
-    } else {
+    else:
         return player1
-    }
-    
-}
 
-controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
+def on_a_pressed():
     sprites.destroy(chosen_enemy)
-    animation.runImageAnimation(player1, [img`
+    animation.run_image_animation(player1,
+        [img("""
                 ..............ffffff....
                         .............f2feeeeff..
                         ............f222feeeeff.
@@ -37,7 +35,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
                         ........................
                         ........................
                         ........................
-            `, img`
+            """),
+            img("""
                 ........................
                         ..............fff.......
                         .............f2fffff....
@@ -62,7 +61,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
                         ........................
                         ........................
                         ........................
-            `, img`
+            """),
+            img("""
                 ...............ff.......
                         .............ff2ffff....
                         ............ff2feeeeff..
@@ -87,7 +87,8 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
                         ........................
                         ........................
                         ........................
-            `, img`
+            """),
+            img("""
                 ..............ffffff....
                         .............f2feeeeff..
                         ............f222feeeeff.
@@ -112,38 +113,47 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
                         ........................
                         ........................
                         ........................
-            `], 100, false)
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function on_overlap_tile(sprite: Sprite, location: tiles.Location) {
-    info.player1.changeScoreBy(1)
-    info.player2.changeScoreBy(1)
-    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
-    tiles.setTileAt(location, sprites.castle.tileGrass1)
-})
-statusbars.onZero(StatusBarKind.Health, function on_on_zero(status: StatusBarSprite) {
-    game.gameOver(false)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_on_overlap(sprite2: Sprite, otherSprite: Sprite) {
-    
+            """)],
+        100,
+        False)
+controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
+
+def on_overlap_tile(sprite, location):
+    info.player1.change_score_by(1)
+    info.player2.change_score_by(1)
+    music.play(music.melody_playable(music.ba_ding),
+        music.PlaybackMode.IN_BACKGROUND)
+    tiles.set_tile_at(location, sprites.castle.tile_grass1)
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.chest_closed,
+    on_overlap_tile)
+
+def on_on_zero(status):
+    game.game_over(False)
+statusbars.on_zero(StatusBarKind.health, on_on_zero)
+
+def on_on_overlap(sprite2, otherSprite):
+    global chosen_enemy
     chosen_enemy = otherSprite
     pause(500)
     player1Health.value += -1
     player2Health.value += -1
     pause(500)
-})
-let Enemies : Sprite[] = []
-let chosen_enemy : Sprite = null
-let p1Distance = 0
-let p2Distance = 0
-let player2Health : StatusBarSprite = null
-let player1Health : StatusBarSprite = null
-let player2 : Sprite = null
-let player1 : Sprite = null
-scene.setBackgroundColor(7)
-tiles.setCurrentTilemap(tilemap`
+sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_on_overlap)
+
+Enemies: List[Sprite] = []
+chosen_enemy: Sprite = None
+p1Distance = 0
+p2Distance = 0
+player2Health: StatusBarSprite = None
+player1Health: StatusBarSprite = None
+player2: Sprite = None
+player1: Sprite = None
+scene.set_background_color(7)
+tiles.set_current_tilemap(tilemap("""
     level1
-`)
-player1 = sprites.create(img`
+"""))
+player1 = sprites.create(img("""
         . . . . . . f f f f . . . . . . 
             . . . . f f f 2 2 f f f . . . . 
             . . . f f f 2 2 2 2 f f f . . . 
@@ -160,8 +170,9 @@ player1 = sprites.create(img`
             . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
             . . . . . f f f f f f . . . . . 
             . . . . . f f . . f f . . . . .
-    `, SpriteKind.Player)
-player2 = sprites.create(img`
+    """),
+    SpriteKind.player)
+player2 = sprites.create(img("""
         . . . . . f f 4 4 f f . . . . . 
             . . . . f 5 4 5 5 4 5 f . . . . 
             . . . f e 4 5 5 5 5 4 e f . . . 
@@ -178,15 +189,16 @@ player2 = sprites.create(img`
             . . e f b d b d b d b b f e . . 
             . . . f f 1 d 1 d 1 d f f . . . 
             . . . . . f f b b f f . . . . .
-    `, SpriteKind.Player)
-controller.player1.moveSprite(player1, 100, 100)
-controller.player2.moveSprite(player2, 100, 100)
-info.player1.setLife(3)
-info.player2.setLife(3)
-info.player1.setScore(0)
-info.player2.setScore(0)
-scene.cameraFollowSprite(player1)
-let Snake = sprites.create(img`
+    """),
+    SpriteKind.player)
+controller.player1.move_sprite(player1, 100, 100)
+controller.player2.move_sprite(player2, 100, 100)
+info.player1.set_life(3)
+info.player2.set_life(3)
+info.player1.set_score(0)
+info.player2.set_score(0)
+scene.camera_follow_sprite(player1)
+Snake = sprites.create(img("""
         . . . . c c c c c c . . . . . . 
             . . . c 6 7 7 7 7 6 c . . . . . 
             . . c 7 7 7 7 7 7 7 7 c . . . . 
@@ -203,34 +215,31 @@ let Snake = sprites.create(img`
             f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
             . f 6 1 1 1 1 1 1 6 6 6 f . . . 
             . . c c c c c c c c c f . . . .
-    `, SpriteKind.Enemy)
-Snake.setPosition(142, 16)
-player1Health = statusbars.create(20, 4, StatusBarKind.Health)
-player1Health.setColor(3, 2)
+    """),
+    SpriteKind.enemy)
+Snake.set_position(142, 16)
+player1Health = statusbars.create(20, 4, StatusBarKind.health)
+player1Health.set_color(3, 2)
 player1Health.value = 100
-player1Health.attachToSprite(player1, -22, 0)
-player2Health = statusbars.create(20, 4, StatusBarKind.Health)
-player2Health.setColor(3, 2)
+player1Health.attach_to_sprite(player1, -22, 0)
+player2Health = statusbars.create(20, 4, StatusBarKind.health)
+player2Health.set_color(3, 2)
 player2Health.value = 100
-player2Health.attachToSprite(player2, -22, 0)
-game.onUpdateInterval(100, function on_update_interval() {
-    
-    player2.setFlag(SpriteFlag.StayInScreen, true)
-    Enemies = sprites.allOfKind(SpriteKind.Enemy)
-    for (let value of Enemies) {
+player2Health.attach_to_sprite(player2, -22, 0)
+
+def on_update_interval():
+    global Enemies, Snake
+    player2.set_flag(SpriteFlag.STAY_IN_SCREEN, True)
+    Enemies = sprites.all_of_kind(SpriteKind.enemy)
+    for value in Enemies:
         value.follow(EnemyFollowing(value), randint(70, 90))
-        if (value.overlapsWith(player2)) {
+        if value.overlaps_with(player2):
             value.follow(player2, 0)
-        }
-        
-        if (value.overlapsWith(player1)) {
+        if value.overlaps_with(player1):
             value.follow(player1, 0)
-        }
-        
         EnemyFollowing(value)
-    }
-    while (Enemies.length < 7) {
-        Snake = sprites.create(img`
+    while len(Enemies) < 7:
+        Snake = sprites.create(img("""
                 . . . . c c c c c c . . . . . . 
                             . . . c 6 7 7 7 7 6 c . . . . . 
                             . . c 7 7 7 7 7 7 7 7 c . . . . 
@@ -247,8 +256,9 @@ game.onUpdateInterval(100, function on_update_interval() {
                             f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
                             . f 6 1 1 1 1 1 1 6 6 6 f . . . 
                             . . c c c c c c c c c f . . . .
-            `, SpriteKind.Enemy)
-        Snake.setPosition(randint(0, scene.screenWidth()), randint(0, scene.screenHeight()))
-        Enemies = sprites.allOfKind(SpriteKind.Enemy)
-    }
-})
+            """),
+            SpriteKind.enemy)
+        Snake.set_position(randint(0, scene.screen_width()),
+            randint(0, scene.screen_height()))
+        Enemies = sprites.all_of_kind(SpriteKind.enemy)
+game.on_update_interval(100, on_update_interval)
