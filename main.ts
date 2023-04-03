@@ -1,3 +1,4 @@
+//  This function allows the enemies to follow the closest player
 function EnemyFollowing(Enemy: Sprite): Sprite {
     
     p2Distance = Math.sqrt((Enemy.x - player2.x) ** 2 + (Enemy.y - player2.y) ** 2)
@@ -10,6 +11,7 @@ function EnemyFollowing(Enemy: Sprite): Sprite {
     
 }
 
+//  This allows the player to destroy the enemy and also animates the player while doing it
 controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
     sprites.destroy(chosen_enemy)
     animation.runImageAnimation(player1, [img`
@@ -114,15 +116,18 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
                         ........................
             `], 100, false)
 })
+//  This creates the chests that give you points
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function on_overlap_tile(sprite: Sprite, location: tiles.Location) {
     info.player1.changeScoreBy(1)
     info.player2.changeScoreBy(1)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     tiles.setTileAt(location, sprites.castle.tileGrass1)
 })
+//  This ends the game if the players health reaches 0
 statusbars.onZero(StatusBarKind.Health, function on_on_zero(status: StatusBarSprite) {
     game.gameOver(false)
 })
+//  This block of code stores the overlapped enemy into a variable, and also depletes the players health when they overlap an enemy.
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_on_overlap(sprite2: Sprite, otherSprite: Sprite) {
     
     chosen_enemy = otherSprite
@@ -131,6 +136,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function on_on_overlap(sp
     player2Health.value += -1
     pause(500)
 })
+//  This block chain creates the players, map, and enemy
 let Enemies : Sprite[] = []
 let chosen_enemy : Sprite = null
 let p1Distance = 0
@@ -213,10 +219,12 @@ player2Health = statusbars.create(20, 4, StatusBarKind.Health)
 player2Health.setColor(3, 2)
 player2Health.value = 100
 player2Health.attachToSprite(player2, -22, 0)
+//  This block chain creates an enemy array, and uses that array to limit the amount of enemies. This also programs the enemies so that they follow the players.
 game.onUpdateInterval(100, function on_update_interval() {
     
     player2.setFlag(SpriteFlag.StayInScreen, true)
     Enemies = sprites.allOfKind(SpriteKind.Enemy)
+    //  This programs the enemies to follow the player
     for (let value of Enemies) {
         value.follow(EnemyFollowing(value), randint(70, 90))
         if (value.overlapsWith(player2)) {
@@ -229,6 +237,7 @@ game.onUpdateInterval(100, function on_update_interval() {
         
         EnemyFollowing(value)
     }
+    //  This creates multiple enemies and also limits the amount of enemies in the game
     while (Enemies.length < 7) {
         Snake = sprites.create(img`
                 . . . . c c c c c c . . . . . . 

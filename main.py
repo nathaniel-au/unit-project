@@ -1,3 +1,4 @@
+# This function allows the enemies to follow the closest player
 def EnemyFollowing(Enemy: Sprite):
     global p2Distance, p1Distance
     p2Distance = Math.sqrt((Enemy.x - player2.x) ** 2 + (Enemy.y - player2.y) ** 2)
@@ -6,6 +7,7 @@ def EnemyFollowing(Enemy: Sprite):
         return player2
     else:
         return player1
+# This allows the player to destroy the enemy and also animates the player while doing it
 
 def on_a_pressed():
     sprites.destroy(chosen_enemy)
@@ -118,6 +120,8 @@ def on_a_pressed():
         False)
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
+# This creates the chests that give you points
+
 def on_overlap_tile(sprite, location):
     info.player1.change_score_by(1)
     info.player2.change_score_by(1)
@@ -128,9 +132,13 @@ scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
 
+# This ends the game if the players health reaches 0
+
 def on_on_zero(status):
     game.game_over(False)
 statusbars.on_zero(StatusBarKind.health, on_on_zero)
+
+# This block of code stores the overlapped enemy into a variable, and also depletes the players health when they overlap an enemy.
 
 def on_on_overlap(sprite2, otherSprite):
     global chosen_enemy
@@ -141,6 +149,7 @@ def on_on_overlap(sprite2, otherSprite):
     pause(500)
 sprites.on_overlap(SpriteKind.player, SpriteKind.enemy, on_on_overlap)
 
+# This block chain creates the players, map, and enemy
 Enemies: List[Sprite] = []
 chosen_enemy: Sprite = None
 p1Distance = 0
@@ -226,11 +235,13 @@ player2Health = statusbars.create(20, 4, StatusBarKind.health)
 player2Health.set_color(3, 2)
 player2Health.value = 100
 player2Health.attach_to_sprite(player2, -22, 0)
+# This block chain creates an enemy array, and uses that array to limit the amount of enemies. This also programs the enemies so that they follow the players.
 
 def on_update_interval():
     global Enemies, Snake
     player2.set_flag(SpriteFlag.STAY_IN_SCREEN, True)
     Enemies = sprites.all_of_kind(SpriteKind.enemy)
+    # This programs the enemies to follow the player
     for value in Enemies:
         value.follow(EnemyFollowing(value), randint(70, 90))
         if value.overlaps_with(player2):
@@ -238,6 +249,7 @@ def on_update_interval():
         if value.overlaps_with(player1):
             value.follow(player1, 0)
         EnemyFollowing(value)
+    # This creates multiple enemies and also limits the amount of enemies in the game
     while len(Enemies) < 7:
         Snake = sprites.create(img("""
                 . . . . c c c c c c . . . . . . 
