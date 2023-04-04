@@ -117,6 +117,81 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     100,
     false
     )
+    pause(400)
+    animation.runImageAnimation(
+    player1,
+    [img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 f f f f f f 2 e f . . 
+        . . f f f f e e e e f f f f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        . . f e e d d d d d d e e f . . 
+        . . . f e e 4 4 4 4 e e f . . . 
+        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+        . . . . . f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . f f e 2 f f f f f f 2 e f f . 
+        . f f f f f e e e e f f f f f . 
+        . . f e f b f 4 4 f b f e f . . 
+        . . f e 4 1 f d d f 1 4 e f . . 
+        . . . f e 4 d d d d 4 e f e . . 
+        . . f e f 2 2 2 2 e d d 4 e . . 
+        . . e 4 f 2 2 2 2 e d d e . . . 
+        . . . . f 4 4 5 5 f e e . . . . 
+        . . . . f f f f f f f . . . . . 
+        . . . . f f f . . . . . . . . . 
+        `,img`
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f f e 2 2 2 2 2 2 e e f . . 
+        . . f e 2 f f f f f f 2 e f . . 
+        . . f f f f e e e e f f f f . . 
+        . f f e f b f 4 4 f b f e f f . 
+        . f e e 4 1 f d d f 1 4 e e f . 
+        . . f e e d d d d d d e e f . . 
+        . . . f e e 4 4 4 4 e e f . . . 
+        . . e 4 f 2 2 2 2 2 2 f 4 e . . 
+        . . 4 d f 2 2 2 2 2 2 f d 4 . . 
+        . . 4 4 f 4 4 5 5 4 4 f 4 4 . . 
+        . . . . . f f f f f f . . . . . 
+        . . . . . f f . . f f . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . f f f f . . . . . . 
+        . . . . f f f 2 2 f f f . . . . 
+        . . . f f f 2 2 2 2 f f f . . . 
+        . . f f f e e e e e e f f f . . 
+        . . f e e 2 2 2 2 2 2 e f f . . 
+        . f f e 2 f f f f f f 2 e f f . 
+        . f f f f f e e e e f f f f f . 
+        . . f e f b f 4 4 f b f e f . . 
+        . . f e 4 1 f d d f 1 4 e f . . 
+        . . e f e 4 d d d d 4 e f . . . 
+        . . e 4 d d e 2 2 2 2 f e f . . 
+        . . . e d d e 2 2 2 2 f 4 e . . 
+        . . . . e e f 5 5 4 4 f . . . . 
+        . . . . . f f f f f f f . . . . 
+        . . . . . . . . . f f f . . . . 
+        `],
+    100,
+    true
+    )
 })
 // This creates the chests that give you points
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
@@ -238,14 +313,72 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
         . c 6 6 f 6 7 7 7 7 7 7 7 7 f . 
         . c c 6 6 f 6 7 c 1 f f c 1 c . 
         . . . c c c c c c c c c c c c . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
         `],
     100,
     false
     )
-    pause(1000)
+    pause(600)
+    animation.runImageAnimation(
+    Snake,
+    [img`
+        . . . . . . c c c c c c . . . . 
+        . . . . . c 6 7 7 7 7 6 c . . . 
+        . . . . c 7 7 7 7 7 7 7 7 c . . 
+        . . . c 6 7 7 7 7 7 7 7 7 6 c . 
+        . . . c 7 7 7 c 6 6 6 6 c 7 c . 
+        . . . f 7 7 7 6 f 6 6 f 6 7 f . 
+        . . . f 7 7 7 7 7 7 7 7 7 7 f . 
+        . . c f 6 7 7 c 6 7 7 7 7 f . . 
+        . c 7 7 f 6 7 7 c c c c f . . . 
+        c 7 7 7 7 f c 6 7 7 7 2 7 c . . 
+        c c 6 7 7 6 c f c 7 7 2 7 7 c . 
+        . . c 6 6 6 c c f 6 7 1 1 1 1 c 
+        . . f 6 6 6 6 c 6 6 1 1 1 1 1 f 
+        . . f c 6 6 6 6 6 1 1 1 1 1 6 f 
+        . . . f 6 6 6 1 1 1 1 1 1 6 f . 
+        . . . . f c c c c c c c c c . . 
+        `,img`
+        . . . . . . . c c c c c c . . . 
+        . . . . . . c 6 7 7 7 7 6 c . . 
+        . . . . . c 7 7 7 7 7 7 7 7 c . 
+        . . . . c 6 7 7 7 7 7 7 7 7 6 c 
+        . . . . c 7 7 7 c 6 6 6 6 c 7 c 
+        . . . . f 7 7 7 6 f 6 6 f 6 7 f 
+        . . . . f 7 7 7 7 7 7 7 7 7 7 f 
+        . . . . f 6 7 7 c 6 7 7 7 7 f . 
+        . . c c c f 6 7 7 c c c c f . . 
+        . c 7 7 7 c c f 7 7 7 2 6 c . . 
+        c 7 7 7 7 6 f c 7 7 2 7 7 6 c . 
+        c c c 6 6 6 c 6 6 7 1 1 1 1 c . 
+        . . c 6 6 6 6 6 6 1 1 1 1 1 c . 
+        . . c 6 6 6 6 6 1 1 1 1 1 6 c . 
+        . . c c 6 6 7 1 1 1 1 1 6 c . . 
+        . . . c c c c c c c c c c . . . 
+        `],
+    100,
+    true
+    )
 })
 // This block chain creates the players, map, and enemy
 let Enemies: Sprite[] = []
+let Snake: Sprite = null
 let chosen_enemy: Sprite = null
 let p1Distance = 0
 let p2Distance = 0
@@ -344,7 +477,7 @@ player1,
     . . . . . f f f f f f f . . . . 
     . . . . . . . . . f f f . . . . 
     `],
-500,
+100,
 true
 )
 player2 = sprites.create(img`
@@ -446,25 +579,6 @@ info.player2.setLife(3)
 info.player1.setScore(0)
 info.player2.setScore(0)
 scene.cameraFollowSprite(player1)
-let Snake = sprites.create(img`
-    . . . . c c c c c c . . . . . . 
-    . . . c 6 7 7 7 7 6 c . . . . . 
-    . . c 7 7 7 7 7 7 7 7 c . . . . 
-    . c 6 7 7 7 7 7 7 7 7 6 c . . . 
-    . c 7 c 6 6 6 6 c 7 7 7 c . . . 
-    . f 7 6 f 6 6 f 6 7 7 7 f . . . 
-    . f 7 7 7 7 7 7 7 7 7 7 f . . . 
-    . . f 7 7 7 7 6 c 7 7 6 f c . . 
-    . . . f c c c c 7 7 6 f 7 7 c . 
-    . . c 7 2 7 7 7 6 c f 7 7 7 7 c 
-    . c 7 7 2 7 7 c f c 6 7 7 6 c c 
-    c 1 1 1 1 7 6 f c c 6 6 6 c . . 
-    f 1 1 1 1 1 6 6 c 6 6 6 6 f . . 
-    f 6 1 1 1 1 1 6 6 6 6 6 c f . . 
-    . f 6 1 1 1 1 1 1 6 6 6 f . . . 
-    . . c c c c c c c c c f . . . . 
-    `, SpriteKind.Enemy)
-Snake.setPosition(142, 16)
 player1Health = statusbars.create(20, 4, StatusBarKind.Health)
 player1Health.setColor(3, 2)
 player1Health.value = 100
@@ -546,8 +660,9 @@ game.onUpdateInterval(100, function () {
             . . c c 6 6 7 1 1 1 1 1 6 c . . 
             . . . c c c c c c c c c c . . . 
             `],
-        500,
+        100,
         true
         )
+        Enemies = sprites.allOfKind(SpriteKind.Enemy)
     }
 })
